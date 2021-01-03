@@ -1,11 +1,14 @@
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-filelayer';
+
 import { 
   otm_init_button_factory,
   otm_button_search,
   otm_button_target,
   otm_button_marker
 } from '../src/otm-buttons.js';
+
+require('leaflet/dist/images/marker-shadow.png');
 require('./index.scss');
 
 
@@ -88,7 +91,10 @@ function otm_init() {
   otm_button_search({ position: 'topleft' }).addTo(map);
   
   // Add target button
-  otm_button_target({ position: 'topleft' }).addTo(map);
+  otm_button_target({ 
+    position: 'topleft',
+    clickhandler: toggleLocate
+  }).addTo(map);
 
   // Add file layer load button
   L.Control.fileLayerLoad({
@@ -114,8 +120,97 @@ function otm_init() {
   // Add marker button
   otm_button_marker({ position: 'topleft' }).addTo(map);
   
+  // Install handlers for geolocation
+  map.on('locationfound', onLocationFound);
+  map.on('locationerror', onLocationError);
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// Location
+///////////////////////////////////////////////////////////////////////////////
 
+var locationPrepare = false;
+var locationActive = false;
+var locationMarker = null;
+var locationCircle = null;
+
+function toggleLocate() {
+  if (!locationPrepare) {
+    if (locationActive) {
+      cancelLocate();
+    }
+    else {
+      map.locate({watch: true, setView: false, timeout: 20000, maxZoom: 17, enableHighAccuracy: true});
+      locationPrepare = true;
+    }
+  }
+}
+
+function onLocationFound(e) {
+
+  // we are out of preparation phase
+  locationPrepare = false;
+  
+  if (locationActive) {
+    
+    // update only
+    locationMarker.setLatLng(e.latlng);
+    locationCircle.setLatLng(e.latlng);
+    locationCircle.setRadius(e.accuracy);
+  }
+  else {
+    
+    // here we go to set up the things
+    // create div icon
+    var lIcon = L.divIcon({className: 'otm-marker-location'});
+    
+    // zoom to location
+    var zoom = map.getZoom();
+    if (zoom < 12) {
+      zoom = 12;
+    }
+    map.setView(e.latlng, zoom);
+    
+    // create location marker
+    locationMarker = L.marker(e.latlng, {
+      icon: lIcon,
+      interactive: false
+    }).addTo(map);
+    
+    // create accuracy circle
+    locationCircle = L.circle(e.latlng, e.accuracy, {
+      interactive: false,
+      className: 'otm-marker-circle'
+    }).addTo(map);
+    
+    // set active flag
+    locationActive = true;
+  }
+}
+
+function onLocationError(e) {
+  console.log(e);
+  alert(e.message);
+  cancelLocate();
+}
+
+function cancelLocate() {
+  
+  // stop location by leaflet
+  map.stopLocate();
+  
+  // remove marker and circle
+  if (locationMarker) {
+    locationMarker.remove();
+  }
+  if (locationCircle) {
+    locationCircle.remove();
+  }
+  
+  // reset status
+  locationPrepare = false;
+  locationActive = false;
+  locationMarker = null;
+  locationCircle = null;
+}

@@ -1,7 +1,3 @@
-import 'leaflet/dist/leaflet.css';
-require('./index.scss');
-
-
 // our button factory
 // ==================
 function otm_init_button_factory() {
@@ -11,15 +7,28 @@ function otm_init_button_factory() {
     initialize:
       function(opts) {
         this._icon = (typeof(opts) !== undefined) ? opts.icon : null;
+        this._clickhandler = (typeof(opts) !== undefined) ? opts.clickhandler : null;
         L.setOptions(this, opts);
       },
     
     onAdd: 
       function (map) {
+        
+        // create button dom
         var button = L.DomUtil.create('div', 'leaflet-bar');
         if (this._icon) {
           L.DomUtil.create('a', 'otm-button-' + this._icon, button);
         }
+        
+        // add click handler
+        var self = this;
+        if (this._clickhandler) {
+          L.DomEvent.on(button, "mousedown touchstart", function (e) {
+            self._clickhandler(e);
+            L.DomEvent.stop(e);
+          });
+        }
+        
         return button;
     },
 

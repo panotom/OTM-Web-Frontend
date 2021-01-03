@@ -41,3 +41,53 @@ body {
   background-image: url('../src-images/icon-marker.svg');
   background-size: 14px auto;
 }
+
+/* Location Marker & Circle */
+/****************************/
+
+$marker-location-size: 12px;
+$marker-location-color: rgba(255,20,20,0.85);
+$marker-location-color-dim: rgba(255,20,20,0.5);
+$marker-location-color-off: rgba(255,20,20,0);
+$marker-location-color-flash: rgba(255,200,200,1);
+
+.otm-marker-location {
+  cursor: inherit;
+  width: $marker-location-size !important;
+  height: $marker-location-size !important;
+  margin-top: - $marker-location-size / 2 !important;
+  margin-left: - $marker-location-size / 2 !important;
+  border-radius: $marker-location-size / 2;
+  background-color: $marker-location-color;
+	box-shadow: 0 0 0 0 $marker-location-color;
+	animation: otm-marker-location-keyframes 1s infinite;
+}
+@keyframes otm-marker-location-keyframes {
+	0% {
+		box-shadow: 0 0 0 0 $marker-location-color-dim;
+    background-color: $marker-location-color-flash;
+	}
+  10% {
+    background-color: $marker-location-color;    
+  }
+  20% {
+    background-color: $marker-location-color-flash;    
+  }
+  30% {
+    background-color: $marker-location-color;    
+  }
+	70% {
+		box-shadow: 0 0 0 $marker-location-size $marker-location-color-off;
+	}
+	100% {
+		box-shadow: 0 0 0 0 $marker-location-color-off;
+	}
+}
+
+.otm-marker-circle {
+  fill: #FF1414;
+  fill-opacity: 0.15;
+  stroke-width: 0.5;
+  stroke: #FF1414;
+  stroke-opacity: 0.9;
+}
