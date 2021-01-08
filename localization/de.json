@@ -1,0 +1,29 @@
+{
+  "sitehead": {
+    "title": "OTM",
+    "description": "OpenTopoMap"
+  },
+  "c": {
+    "map_data": "Kartendaten",
+    "map_imagery": "Kartendarstellung",
+    "contributors": "Mitwirkende",
+    "hikeroutes": "Wanderrouten",
+    "bikeroutes": "Radrouten"
+  },
+  "layers_base": {
+    "OTM": "OpenTopoMap",
+    "OSM": "OpenStreetMap"
+  },
+  "layers_overlay": {
+    "Lonvia_hike": "Lonvia Wanderrouten",
+    "Lonvia_bike": "Lonvia Radrouten"
+  },
+  "locate": {
+    "message_locating": "Standort wird ermittelt",
+    "errors": [
+      "Ok",
+      "Standortermittlung durch Browsereinstellungen gesperrt",
+      "Bei der Standortermittlung ist ein Fehler aufgetreten"
+    ]
+  }
+}

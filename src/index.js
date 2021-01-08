@@ -1,216 +1,106 @@
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-filelayer';
+////////////////////////////////////////////////////////
+//
+// OTM Web Frontend - index.js
+//
+// Entry point with global static UI object and 
+// init functions
+//
+// V 2.00 - 01.01.2021 - Thomas Worbs
+//          Created
+//
+////////////////////////////////////////////////////////
 
-import { 
-  otm_init_button_factory,
-  otm_button_search,
-  otm_button_target,
-  otm_button_marker
-} from '../src/otm-buttons.js';
+// imports & requires
+// ==================
+import 'leaflet-filelayer';
+import 'leaflet/dist/leaflet.css';
+
+import { otm_load_localization } from '../src/otm-load-localization.js';
+import { otm_init_layers } from '../src/otm-layers.js';
+import { otm_create_language_picker } from '../src/otm-ui-language-picker.js';
+import { otm_ui_init_controls, otm_ui_show_scale, otm_ui_hide_scale } from '../src/otm-ui-controls.js';
+import { otm_init_locate } from '../src/otm-locate.js';
 
 require('leaflet/dist/images/marker-shadow.png');
 require('./index.scss');
 
+// global ui object
+// ================
+var ui = {
+  
+  // context
+  ctx: {
+    language: 'en'  
+  },
+  
+  // languages & localization
+  lang: null,
+  loc: null,
+  
+  // map instance
+  map: null,
+  
+  // map layers, will be initialized by otm_init_layers()
+  layers: {
+    base: {},
+    overlay: {}
+  },
 
-// OTM layer object
-const layerOtm = new L.TileLayer(
-  'https://opentopomap.org/{z}/{x}/{y}.png', 
-  {
-    minZoom: 5,
-    maxZoom: 17,
-    attribution: 'Kartendaten: <a href="https://openstreetmap.org">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: <a href="https://opentopomap.org">OpenTopoMap</a>, &copy; <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>'
-}); 
+  // ui controls
+  ctrl: {
+    buttonSeach: null,      // search button object
+    buttonLocate: null,     // locate button object
+    buttonFileLayer: null,  // file layer button object
+    buttonMarker: null,     // marker button object
+    scale: null,            // scale control
+    languagePicker: null    // language picker control
+  },
+  
+  // position locate control
+  locate: {
+    prepare: false,   // prepare status
+    active: false,    // active status
+    marker: null,     // marker object
+    circle: null,     // accuracy circle object
+    message: null     // message control object
+  }
+}
 
-// OSM layer object
-const layerOsm = new L.TileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
-  {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
-
-// Lonvia hiking
-const layerLonviaHiking = new L.TileLayer(
-  'https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png', 
-  {
-    maxZoom: 15,
-    attribution: 'Wanderwege &copy; Lonvia',
-    opacity: 0.7
-});
-
-// Lonvia cycling
-const layerLonviaCycling = new L.TileLayer(
-  'http://tile.waymarkedtrails.org/cycling/{z}/{x}/{y}.png', 
-  {
-    maxZoom: 15,
-    attribution: 'Wanderwege &copy; Lonvia',
-    opacity: 0.7
-});
-
-// objects for layer control
-const baseLayers = {
-  "OpenTopoMap": layerOtm,
-  "OpenStreetMap": layerOsm
-};
-
-const overlayLayers = {
-  "Lonvia Wanderrouten": layerLonviaHiking,
-  "Lonvia Radrouten": layerLonviaCycling
-};
-
-// global for our map instance
-var map = null;
-
-// heat out button factory
-otm_init_button_factory();
 
 // init map call
-otm_init();
+otm_load_localization(otm_init, otm_error);
 
-////////////////////////////////////////////////////////////////////////////////
+function otm_error() {
+  alert("Severe Load Error (Localization)");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 function otm_init() {
 
   // Create a leaflet map instance
-  map = L.map('map', {
+  ui.map = L.map('map', {
     doubleClickZoom: true,
     dragging: true,
   }).setView([47, 11], 5);
 
-
-  // Add OTM layer
-  layerOtm.addTo(map);
   
-  // Add the layer control
-  L.control.layers(baseLayers, overlayLayers).addTo(map);
+  // Init the map layers
+  otm_init_layers();
   
-  // Add scale control
-  L.control.scale({ maxWidth: 200, metric: true, imperial: false }).addTo(map);
+  // Create language picker
+  otm_create_language_picker();
   
-  // Add search button
-  otm_button_search({ position: 'topleft' }).addTo(map);
+  // Show scale control
+  otm_ui_show_scale();
   
-  // Add target button
-  otm_button_target({ 
-    position: 'topleft',
-    clickhandler: toggleLocate
-  }).addTo(map);
-
-  // Add file layer load button
-  L.Control.fileLayerLoad({
-    layer: L.geoJson,
-    layerOptions: {style: {color:'red'}},
-    addToMap: true,
-    fileSizeLimit: 1024,
-    formats: [
-      '.geojson',
-      '.json',
-      '.kml',
-      '.gpx'
-    ]
-  }).addTo(map);
+  // Init all UI controles (buttpns left)
+  otm_ui_init_controls();
   
-  // replace button content of file layer
-  var els = document.getElementsByClassName("leaflet-control-filelayer");
-  if (els.length > 1) {
-    L.DomUtil.empty(els[1]);
-    L.DomUtil.addClass(els[1], 'otm-button-waypoints');
-  }
-  
-  // Add marker button
-  otm_button_marker({ position: 'topleft' }).addTo(map);
-  
-  // Install handlers for geolocation
-  map.on('locationfound', onLocationFound);
-  map.on('locationerror', onLocationError);
+  // Init location handling
+  otm_init_locate();
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Location
-///////////////////////////////////////////////////////////////////////////////
-
-var locationPrepare = false;
-var locationActive = false;
-var locationMarker = null;
-var locationCircle = null;
-
-function toggleLocate() {
-  if (!locationPrepare) {
-    if (locationActive) {
-      cancelLocate();
-    }
-    else {
-      map.locate({watch: true, setView: false, timeout: 20000, maxZoom: 17, enableHighAccuracy: true});
-      locationPrepare = true;
-    }
-  }
-}
-
-function onLocationFound(e) {
-
-  // we are out of preparation phase
-  locationPrepare = false;
-  
-  if (locationActive) {
-    
-    // update only
-    locationMarker.setLatLng(e.latlng);
-    locationCircle.setLatLng(e.latlng);
-    locationCircle.setRadius(e.accuracy);
-  }
-  else {
-    
-    // here we go to set up the things
-    // create div icon
-    var lIcon = L.divIcon({className: 'otm-marker-location'});
-    
-    // zoom to location
-    var zoom = map.getZoom();
-    if (zoom < 12) {
-      zoom = 12;
-    }
-    map.setView(e.latlng, zoom);
-    
-    // create location marker
-    locationMarker = L.marker(e.latlng, {
-      icon: lIcon,
-      interactive: false
-    }).addTo(map);
-    
-    // create accuracy circle
-    locationCircle = L.circle(e.latlng, e.accuracy, {
-      interactive: false,
-      className: 'otm-marker-circle'
-    }).addTo(map);
-    
-    // set active flag
-    locationActive = true;
-  }
-}
-
-function onLocationError(e) {
-  console.log(e);
-  alert(e.message);
-  cancelLocate();
-}
-
-function cancelLocate() {
-  
-  // stop location by leaflet
-  map.stopLocate();
-  
-  // remove marker and circle
-  if (locationMarker) {
-    locationMarker.remove();
-  }
-  if (locationCircle) {
-    locationCircle.remove();
-  }
-  
-  // reset status
-  locationPrepare = false;
-  locationActive = false;
-  locationMarker = null;
-  locationCircle = null;
-}
+// our exports
+// ===========
+export { ui };

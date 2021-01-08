@@ -22,15 +22,33 @@ body {
   height: 100%;
 }
 
+/* color definition for controls */
+/*********************************/
+$control-background-color: #FFFFFF;
+$control-hover-color: #F7F7F7;
+$control-separator-color: #F0F0F0;
+
+/* common button classes for special styling */
+/*********************************************/
+.otm-button-toggled {
+  background-color: #606060 !important;
+  &:hover {
+    background-color: #474747 !important;    
+  }
+}
+
+/* specific button classes for different icons */
+/***********************************************/
 .otm-button-search {
   background-image: url('../src-images/icon-search.svg');
   background-size: 20px auto;
-  path {
-    fill: orange;
-  }
 }
 .otm-button-target {
   background-image: url('../src-images/icon-target.svg');
+  background-size: 22px auto;
+}
+.otm-button-target-w {
+  background-image: url('../src-images/icon-target-w.svg');
   background-size: 22px auto;
 }
 .otm-button-waypoints {
@@ -44,7 +62,6 @@ body {
 
 /* Location Marker & Circle */
 /****************************/
-
 $marker-location-size: 12px;
 $marker-location-color: rgba(255,20,20,0.85);
 $marker-location-color-dim: rgba(255,20,20,0.5);
@@ -83,7 +100,6 @@ $marker-location-color-flash: rgba(255,200,200,1);
 		box-shadow: 0 0 0 0 $marker-location-color-off;
 	}
 }
-
 .otm-marker-circle {
   fill: #FF1414;
   fill-opacity: 0.15;
@@ -91,3 +107,95 @@ $marker-location-color-flash: rgba(255,200,200,1);
   stroke: #FF1414;
   stroke-opacity: 0.9;
 }
+
+/* location message */
+/********************/
+.otm-message-location {
+  font-size: 14px;
+  width: auto !important;
+  padding: 0 14px;
+  pointer-events: none;
+  cursor: inherit;
+}
+.otm-message-container {
+  pointer-events: none;
+  cursor: inherit;  
+}
+.otm-message-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 4px 0 -2px 14px;
+  background-color: #FF1414;
+  border-radius: 100%;  
+  animation: otm-message-spinner-animation 1s infinite ease-in-out;
+}
+@keyframes otm-message-spinner-animation {
+  0% { 
+    transform: scale(0);
+  } 
+  100% {
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+/* language picker */
+/*******************/
+.otm-lang-picker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.otm-lang-picker-button {
+  position: relative;
+  display: flex;
+  width: 44px;
+  line-height: 3;
+  overflow: hidden;
+  background-color: $control-background-color;
+  &:hover {
+    background-color: $control-hover-color;
+  }
+  &::after {
+    content: '\25BC';
+    position: absolute;
+    top: -7px;
+    right: 0;
+    padding: 0 4px 4px 4px;
+    color: #F0F0F0;
+    cursor: pointer;
+    pointer-events: none;
+    transition: .25s all ease;
+  }
+  &:hover::after {
+    color: #707070;
+  }
+}
+.otm-lang-picker-dropdown {
+  background-color: $control-background-color;
+  width: 44px;
+  border-radius: 0 0 2px 2px;
+  display: none;
+}
+.otm-lang-picker-dropdown.dropped {
+  display: flex;
+  flex-direction: column;
+}
+.otm-lang-picker-item {
+  border-top: 1px solid $control-separator-color;
+  display: flex;
+  line-height: 0;
+  justify-content: center;
+  &:hover {
+    background-color: $control-hover-color;
+  }
+}
+.otm-lang-picker img {
+  width: 18px;
+  height: 12px;
+  margin: 6px;
+  box-shadow: 0px 0px 4px 2px $control-separator-color;
+}
+
+

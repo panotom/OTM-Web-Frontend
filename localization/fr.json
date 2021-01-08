@@ -1,0 +1,29 @@
+{
+  "sitehead": {
+    "title": "OTM",
+    "description": "OpenTopoMap"
+  },
+  "c": {
+    "map_data": "map data",
+    "map_imagery": "map imagery",
+    "contributors": "contributors",
+    "hikeroutes": "hiking routes",
+    "bikeroutes": "cycling routes"
+  },
+  "layers_base": {
+    "OTM": "OpenTopoMap",
+    "OSM": "OpenStreetMap"
+  },
+  "layers_overlay": {
+    "Lonvia_hike": "Lonvia Hiking Routes",
+    "Lonvia_bike": "Lonvia Cycling Routes"
+  },
+  "locate": {
+    "message_locating": "Detecting geolocation",
+    "errors": [
+      "Ok",
+      "Geolocation detection blocked by browser settings",
+      "Geolocation detection failed"
+    ]
+  }
+}
