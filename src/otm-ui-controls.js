@@ -16,6 +16,7 @@
 import 'leaflet-filelayer';
 import { ui } from '../src/index.js';
 import { otm_toggle_locate } from '../src/otm-locate.js';
+import { otm_toggle_marker } from '../src/otm-marker.js';
 
 // our button factory
 // ==================
@@ -52,6 +53,11 @@ function otm_init_button_factory() {
             L.DomEvent.stop(e);
           });
         }
+        
+        // add click + doubleclick handler to prevent map zoom
+        L.DomEvent.on(this._button, "click dblclick", (e) => {
+          L.DomEvent.stop(e);
+        });
         
         // return created element
         return this._button;
@@ -138,7 +144,10 @@ function otm_ui_init_controls() {
   }
   
   // Add marker button
-  ui.ctrl.buttonMarker = otm_button_marker({ position: 'topleft' }).addTo(ui.map);
+  ui.ctrl.buttonMarker = otm_button_marker({ 
+    position: 'topleft',
+    clickhandler: otm_toggle_marker
+  }).addTo(ui.map);
   
 }
 

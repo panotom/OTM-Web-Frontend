@@ -1,0 +1,10 @@
+# OTM redirects for language urls
+
+RewriteEngine on
+
+# Exclude the existing files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# The following line has to be adjusted according to the server url
+RewriteRule ^(.*)$ /____otm-test/index.php [L]

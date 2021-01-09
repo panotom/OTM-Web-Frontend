@@ -30,7 +30,8 @@ function otm_init_layers() {
   // OSM layer object
   ui.layers.base[ui.loc.layers_base.OSM] = new L.TileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
+      minZoom: 5,
+      maxZoom: 17,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ' + ui.loc.c.contributors
     });
 

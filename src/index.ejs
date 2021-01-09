@@ -1,14 +1,40 @@
 <!doctype html>
-<html lang="de-DE">
+<% if (isEnvDevelopment) { %>
+  <html lang="de-DE">
+<% } else { %>
+  <?php
+    $lang = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+    $langdef = json_decode(file_get_contents("l/lang.json"),false);
+    $uc = explode("/", $_SERVER[REQUEST_URI]);
+    for ($i = count($uc); $i--; $i > 0) {
+      if (preg_match("/^[a-z|A-Z]{2}$/", $uc[$i])) {
+        $lang = strtolower(substr($uc[$i], 0, 2));
+        break;
+      }
+    }
+    if (array_search($lang, $langdef->languages) === false) {
+      $lang = $langdef->defaultLanguage;
+    }
+    echo '<html lang="' . $lang . '">';
+    $locdef = json_decode(file_get_contents("l/" . $lang . ".json"),false);
+  ?>
+<% } %>
+
 <head>
-	<title>OpenTopoMap - Topographische Karten aus OpenStreetMap</title>
+  <% if (isEnvDevelopment) { %>
+	 <title>OpenTopoMap - Test</title>
+   <meta name="description" content="Entwicklungsversion">
+  <% } else { %>
+	 <title><?php echo $locdef->sitehead->title; ?></title>
+   <?php echo '<meta name="description" content="' . $locdef->sitehead->description . '">'; ?>
+  <% } %>
   <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta http-equiv="x-ua-compatible" content="IE=edge" />
-  <meta name="description" content="direkt zur Karte...">
+  <link rel="shortcut icon" type="image/x-icon" href="<%= EnvBrowserPath + 'favicon.ico' %>">
 </head>
 
 <body>

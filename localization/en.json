@@ -1,7 +1,7 @@
 {
   "sitehead": {
-    "title": "OTM",
-    "description": "OpenTopoMap"
+    "title": "OpenTopoMap - Topographic Maps from OpenStreetMap data",
+    "description": "... directly to the map"
   },
   "c": {
     "map_data": "map data",

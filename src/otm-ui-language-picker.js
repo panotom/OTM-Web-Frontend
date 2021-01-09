@@ -12,6 +12,8 @@
 // imports & requires
 // ==================
 import { ui } from '../src/index.js';
+import { otm_set_url_context } from '../src/otm-context.js';
+
 require.context('../src-images/', false, /f-.*\.(svg)$/);
 
 // our button factory
@@ -107,7 +109,8 @@ function otm_create_language_picker() {
     language: ui.ctx.language,
     onSelectionChange: (la) => {
       ui.ctx.language = la;
-      alert("Language selected: " + la);
+      otm_set_url_context();
+      location.reload();
     },
     position: 'topright'
   });

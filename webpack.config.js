@@ -14,12 +14,24 @@ module.exports = (env, argv) => {
   EnvBrowserPath = isEnvDevelopment ? 'http://localhost:9000/' : 'https://www.mountainpanoramas.com/____otm-test/';
 
   return {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: isEnvProduction ? '[contenthash].js' : '[name].js',
+    publicPath: EnvBrowserPath
+  },
+
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     open: true,
     port: 9000,
-    historyApiFallback: true
+    historyApiFallback: {
+      rewrites: [
+        { from: /^.*index\.js$/, to: 'index.js' },
+      ]
+    }
   },
+  
   module: {
     rules: [
       {
@@ -35,13 +47,23 @@ module.exports = (env, argv) => {
       },
       {
         // images
-        test: /\.(png|gif|jpg|jpeg|svg|ico)$/,
+        test: /\.(png|gif|jpg|jpeg|svg)$/,
         use: {
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
             outputPath: 'i',
-            esModule: false
+          }
+        }
+      },
+      {
+        // favicon
+        test: /\.(ico)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: '',
           }
         }
       },
@@ -56,13 +78,18 @@ module.exports = (env, argv) => {
     // HTML template
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src", "index.ejs"),
-      filename: isEnvDevelopment ? 'index.html' : 'index.php'
+      filename: isEnvDevelopment ? 'index.html' : 'index.php',
+      templateParameters: {
+        'isEnvDevelopment': isEnvDevelopment,
+        'EnvBrowserPath': EnvBrowserPath
+      }
     }),
     
     // copy language jsons
     new CopyPlugin({
       patterns: [
-        { from: "localization", to: "l" }
+        { from: "localization", to: "l" },
+        { from: "src-htaccess", to: "" }
       ],
     }),
     

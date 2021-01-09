@@ -15,12 +15,15 @@
 import 'leaflet-filelayer';
 import 'leaflet/dist/leaflet.css';
 
+import { otm_get_context, otm_set_url_context } from '../src/otm-context.js';
 import { otm_load_localization } from '../src/otm-load-localization.js';
 import { otm_init_layers } from '../src/otm-layers.js';
 import { otm_create_language_picker } from '../src/otm-ui-language-picker.js';
 import { otm_ui_init_controls, otm_ui_show_scale, otm_ui_hide_scale } from '../src/otm-ui-controls.js';
 import { otm_init_locate } from '../src/otm-locate.js';
+import { otm_create_marker } from '../src/otm-marker.js';
 
+require('../src-images/favicon.ico');
 require('leaflet/dist/images/marker-shadow.png');
 require('./index.scss');
 
@@ -30,7 +33,19 @@ var ui = {
   
   // context
   ctx: {
-    language: 'en'  
+    language: 'en',
+    mapLatLng: { lat: 47, lng: 11 },
+    mapZoom: 5,
+    baseLayer: 1,
+    overlayLayers: [],
+    markerActive: false,
+    markerLatLng: { lat: 47, lng: 11 }
+  },
+  
+  // bounds
+  bounds: {
+    minZoom: 5,
+    maxZoom: 17
   },
   
   // languages & localization
@@ -63,13 +78,22 @@ var ui = {
     marker: null,     // marker object
     circle: null,     // accuracy circle object
     message: null     // message control object
+  },
+  
+  // marker control
+  marker: {
+    e: null           // element
   }
 }
 
 
+// get url & cookie context
+otm_get_context();
+  
 // init map call
 otm_load_localization(otm_init, otm_error);
 
+// error abort when language json load failed
 function otm_error() {
   alert("Severe Load Error (Localization)");
 }
@@ -78,13 +102,15 @@ function otm_error() {
 
 function otm_init() {
 
+  // Replace url to clean
+  otm_set_url_context();
+
   // Create a leaflet map instance
   ui.map = L.map('map', {
     doubleClickZoom: true,
     dragging: true,
-  }).setView([47, 11], 5);
+  }).setView(ui.ctx.mapLatLng, ui.ctx.mapZoom);
 
-  
   // Init the map layers
   otm_init_layers();
   
@@ -99,6 +125,18 @@ function otm_init() {
   
   // Init location handling
   otm_init_locate();
+  
+  // Map handlers
+  ui.map.on('moveend zoomend', (e) => {
+    ui.ctx.mapZoom = ui.map.getZoom();
+    ui.ctx.mapLatLng = ui.map.getCenter();
+    otm_set_url_context();
+  })
+  
+  // Marker display
+  if (ui.ctx.markerActive) {
+    otm_create_marker(ui.ctx.markerLatLng,true);
+  }
 }
 
 // our exports

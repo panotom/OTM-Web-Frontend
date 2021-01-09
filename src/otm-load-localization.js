@@ -11,20 +11,12 @@
 
 // imports & requires
 // ==================
-import {
-  get as axiosget
-} from 'axios';
-import {
-  ui
-} from '../src/index.js';
+import { get as axiosget } from 'axios';
+import { ui } from '../src/index.js';
 
 // async localization loader
 // =========================
 function otm_load_localization(success, error) {
-
-  var lang = document.getElementsByTagName("html")[0].getAttribute("lang").toLowerCase().substring(0, 2);
-  console.log("Language from html element: ", lang);
-  ui.ctx.language = lang;
 
   axiosget(OTM_ENV_BROWSERPATH + 'l/lang.json')
     .then(({
@@ -53,6 +45,4 @@ function otm_load_localization(success, error) {
 
 // our exports
 // ===========
-export {
-  otm_load_localization
-};
+export { otm_load_localization };
