@@ -39,10 +39,12 @@ function otm_create_marker(pos,init) {
   ui.marker.e = L.marker(
     pos,
     {
+      //icon: L.Icon.Default,
       draggable: true,
       autoPan: true
     }
   ).addTo(ui.map);
+  //console.log('MARKER ',ui.marker.e)
   
   // add drag end event for updating context
   ui.marker.e.on('dragend', onMarkerMoved);

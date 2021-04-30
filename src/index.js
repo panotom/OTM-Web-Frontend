@@ -25,6 +25,9 @@ import { otm_create_marker } from '../src/otm-marker.js';
 
 require('../src-images/favicon.ico');
 require('leaflet/dist/images/marker-shadow.png');
+require('leaflet/dist/images/marker-icon.png');
+require('leaflet/dist/images/layers.png');
+require('leaflet/dist/images/layers-2x.png');
 require('./index.scss');
 
 // global ui object
@@ -44,7 +47,7 @@ var ui = {
   
   // bounds
   bounds: {
-    minZoom: 5,
+    minZoom: 3,
     maxZoom: 17
   },
   
