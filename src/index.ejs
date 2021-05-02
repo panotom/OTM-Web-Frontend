@@ -5,13 +5,6 @@
   <?php
     $lang = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
     $langdef = json_decode(file_get_contents("l/lang.json"),false);
-    $uc = explode("/", $_SERVER[REQUEST_URI]);
-    for ($i = count($uc); $i--; $i > 0) {
-      if (preg_match("/^[a-z|A-Z]{2}$/", $uc[$i])) {
-        $lang = strtolower(substr($uc[$i], 0, 2));
-        break;
-      }
-    }
     if (array_search($lang, $langdef->languages) === false) {
       $lang = $langdef->defaultLanguage;
     }

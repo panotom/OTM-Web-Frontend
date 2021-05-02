@@ -12,7 +12,7 @@
 // imports & requires
 // ==================
 import { ui } from '../src/index.js';
-import { otm_set_url_context } from '../src/otm-context.js';
+import { otm_set_cookie_context } from '../src/otm-context.js';
 
 require.context('../src-images/', false, /f-.*\.(svg)$/);
 
@@ -109,7 +109,7 @@ function otm_create_language_picker() {
     language: ui.ctx.language,
     onSelectionChange: (la) => {
       ui.ctx.language = la;
-      otm_set_url_context();
+      otm_set_cookie_context();
       location.reload();
     },
     position: 'topright'

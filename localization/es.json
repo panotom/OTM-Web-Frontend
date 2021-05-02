@@ -10,14 +10,15 @@
     "hikeroutes": "hiking routes",
     "bikeroutes": "cycling routes"
   },
-  "layers_base": {
-    "OTM": "OpenTopoMap",
-    "OSM": "OpenStreetMap"
-  },
-  "layers_overlay": {
-    "Lonvia_hike": "Lonvia Hiking Routes",
-    "Lonvia_bike": "Lonvia Cycling Routes"
-  },
+  "layers_base": [
+    "OpenTopoMap",
+    "OpenStreetMap"
+  ],
+  "layers_overlay": [
+    "Lonvia Hiking Routes",
+    "Lonvia Cycling Routes",
+    "QTH Graticule"
+  ],
   "locate": {
     "message_locating": "Detecting geolocation",
     "errors": [

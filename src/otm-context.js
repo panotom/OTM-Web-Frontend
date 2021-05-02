@@ -12,14 +12,21 @@
 // imports & requires
 // ==================
 import { ui } from '../src/index.js';
+import Cookies from 'js-cookie';
 
 // get the cookie & url context
 // ============================
 function otm_get_context() {
 
-  // get languate from html language attribute
+  // get language from html language attribute
   ui.ctx.language = document.getElementsByTagName("html")[0].getAttribute("lang").toLowerCase().substring(0, 2);
   
+  // get the cookie and set context
+  var cookieRaw = Cookies.get(OTM_ENV_COOKIE_NAME);
+  if (cookieRaw) {
+    ui.ctx = JSON.parse(cookieRaw);
+  }
+
   // get hash part of url
   var urlhash = location.hash;
   
@@ -53,13 +60,23 @@ function otm_get_context() {
   }
 }
 
-// set the url context
-// ===================
+// set the cookie context
+// ======================
+function otm_set_cookie_context() {
+  Cookies.set(OTM_ENV_COOKIE_NAME, 
+              JSON.stringify(ui.ctx), 
+              OTM_ENV_DEVELOPMENT ?
+              { expires: 14 } :
+              { expires: 14, path: '/', domain: OTM_ENV_DOMAIN, samesite: 'none', secure: true });
+  // samesite must be none, otherwise ios safari looses the cookie on re-activation of cached page
+}
+
+// set the url + cookie context
+// ============================
 function otm_set_url_context() {
  
   // build url
   var url = OTM_ENV_BROWSERPATH + 
-            ui.ctx.language + "/" +
             (ui.ctx.markerActive ? "#marker=" : "#map=") +
             ui.ctx.mapZoom + "/" +
             (ui.ctx.markerActive ? 
@@ -68,15 +85,17 @@ function otm_set_url_context() {
   
   // replace url
   history.replaceState({},ui.loc.sitehead.title,url);
+
+  // set cookie context
+  otm_set_cookie_context();
 }
 
 // cut coordinate to recent digits
 // ===============================
 function otm_coord_cut(coord) {
-  
   return coord.toFixed(Math.ceil( 2 * Math.log(ui.ctx.mapZoom) - 1));
 }
 
 // our exports
 // ===========
-export { otm_get_context, otm_set_url_context };
+export { otm_get_context, otm_set_url_context, otm_set_cookie_context };

@@ -10,14 +10,15 @@
     "hikeroutes": "Wanderrouten",
     "bikeroutes": "Radrouten"
   },
-  "layers_base": {
-    "OTM": "OpenTopoMap",
-    "OSM": "OpenStreetMap"
-  },
-  "layers_overlay": {
-    "Lonvia_hike": "Lonvia Wanderrouten",
-    "Lonvia_bike": "Lonvia Radrouten"
-  },
+  "layers_base": [
+    "OpenTopoMap",
+    "OpenStreetMap"
+  ],
+  "layers_overlay": [
+    "Lonvia Wanderrouten",
+    "Lonvia Radrouten",
+    "QTH-Gitternetz"
+  ],
   "locate": {
     "message_locating": "Standort wird ermittelt",
     "errors": [

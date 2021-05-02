@@ -21,7 +21,7 @@ function otm_init_layers() {
 
   // layer DEFINITIONS
   // OTM base layer object
-  ui.layers.base[ui.loc.layers_base.OTM] = new L.TileLayer(
+  ui.layers.base[ui.loc.layers_base[ui.c.BASELAYER_OTM]] = new L.TileLayer(
     'https://opentopomap.org/{z}/{x}/{y}.png', {
       minZoom: ui.bounds.minZoom,
       maxZoom: ui.bounds.maxZoom,
@@ -29,7 +29,7 @@ function otm_init_layers() {
     });
 
   // OSM layer object
-  ui.layers.base[ui.loc.layers_base.OSM] = new L.TileLayer(
+  ui.layers.base[ui.loc.layers_base[ui.c.BASELAYER_OSM]] = new L.TileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       minZoom: ui.bounds.minZoom,
       maxZoom: ui.bounds.maxZoom,
@@ -37,7 +37,7 @@ function otm_init_layers() {
     });
 
   // Lonvia hiking
-  ui.layers.overlay[ui.loc.layers_overlay.Lonvia_hike] = new L.TileLayer(
+  ui.layers.overlay[ui.loc.layers_overlay[ui.c.OVERLAYLAYER_LONVIA_HIKE]] = new L.TileLayer(
     'https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png', {
       maxZoom: ui.bounds.maxZoom,
       attribution: ui.loc.c.hikeroutes + ' &copy; Lonvia',
@@ -45,7 +45,7 @@ function otm_init_layers() {
     });
 
   // Lonvia cycling
-  ui.layers.overlay[ui.loc.layers_overlay.Lonvia_bike] = new L.TileLayer(
+  ui.layers.overlay[ui.loc.layers_overlay[ui.c.OVERLAYLAYER_LONVIA_BIKE]] = new L.TileLayer(
     'http://tile.waymarkedtrails.org/cycling/{z}/{x}/{y}.png', {
       maxZoom: ui.bounds.maxZoom,
       attribution: ui.loc.c.bikeroutes + ' &copy; Lonvia',
@@ -54,14 +54,19 @@ function otm_init_layers() {
 
   // QTH Grid
   otm_init_qth_factory();
-  ui.layers.overlay['QTH'] = new L.QthGrid(
+  ui.layers.overlay[ui.loc.layers_overlay[ui.c.OVERLAYLAYER_QTH]] = new L.QthGrid(
   {
     showLabel: true
   });
   
-  // Add OTM layer
-  ui.layers.base[ui.loc.layers_base.OTM].addTo(ui.map);
+  // Add active baselayer
+  ui.layers.base[ui.loc.layers_base[ui.ctx.baseLayer]].addTo(ui.map);
   
+  // Add active overlays
+  ui.ctx.overlayLayers.forEach( oid => {
+    ui.layers.overlay[ui.loc.layers_overlay[oid]].addTo(ui.map);
+  });
+
   // Add the layer control
   L.control.layers(ui.layers.base, ui.layers.overlay).addTo(ui.map);
 }

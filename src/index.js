@@ -15,7 +15,7 @@
 import 'leaflet-filelayer';
 import 'leaflet/dist/leaflet.css';
 
-import { otm_get_context, otm_set_url_context } from '../src/otm-context.js';
+import { otm_get_context, otm_set_url_context, otm_set_cookie_context } from '../src/otm-context.js';
 import { otm_load_localization } from '../src/otm-load-localization.js';
 import { otm_init_layers } from '../src/otm-layers.js';
 import { otm_create_language_picker } from '../src/otm-ui-language-picker.js';
@@ -32,17 +32,27 @@ require('./index.scss');
 
 // global ui object
 // ================
+
 var ui = {
   
-  // context
+  // context, this will be stored in the cookie
   ctx: {
     language: 'en',
     mapLatLng: { lat: 47, lng: 11 },
     mapZoom: 5,
-    baseLayer: 1,
+    baseLayer: 0,
     overlayLayers: [],
     markerActive: false,
     markerLatLng: { lat: 47, lng: 11 }
+  },
+
+  // constants
+  c: {
+    BASELAYER_OTM: 0,
+    BASELAYER_OSM: 1,
+    OVERLAYLAYER_LONVIA_HIKE: 0,
+    OVERLAYLAYER_LONVIA_BIKE: 1,
+    OVERLAYLAYER_QTH: 2
   },
   
   // bounds
@@ -89,11 +99,13 @@ var ui = {
   }
 }
 
+// here is the functional code entry point when js is loaded
+// =========================================================
 
 // get url & cookie context
 otm_get_context();
   
-// init map call
+// load localization json, then init map call or abort with alert on load error
 otm_load_localization(otm_init, otm_error);
 
 // error abort when language json load failed
@@ -129,17 +141,44 @@ function otm_init() {
   // Init location handling
   otm_init_locate();
   
-  // Map handlers
+  // Initial marker display
+  if (ui.ctx.markerActive) {
+    otm_create_marker(ui.ctx.markerLatLng,true);
+  }
+
+  // Install map event handlers
+  // Zoom and move
   ui.map.on('moveend zoomend', (e) => {
     ui.ctx.mapZoom = ui.map.getZoom();
     ui.ctx.mapLatLng = ui.map.getCenter();
     otm_set_url_context();
-  })
+  });
+  // Baselayer change
+  ui.map.on('baselayerchange', (e) => {
+    ui.ctx.baseLayer = ui.loc.layers_base.indexOf(e.name);
+    otm_set_cookie_context();
+  });
+  // Overlay add
+  ui.map.on('overlayadd', (e) => {
+    var overlayId = ui.loc.layers_overlay.indexOf(e.name);
+    if (ui.ctx.overlayLayers.indexOf(overlayId) < 0) {
+      ui.ctx.overlayLayers.push(overlayId);
+    }
+    otm_set_cookie_context();
+  });
+  // Overlay remove
+  ui.map.on('overlayremove', (e) => {
+    var overlayId = ui.loc.layers_overlay.indexOf(e.name);
+    var overlayPos = ui.ctx.overlayLayers.indexOf(overlayId);
+    if (overlayPos >= 0) {
+      for (var i=overlayPos; i<ui.ctx.overlayLayers.length-1; i++) {
+        ui.ctx.overlayLayers[i] = ui.ctx.overlayLayers[i+1];
+      }
+      ui.ctx.overlayLayers.pop();
+    }
+    otm_set_cookie_context();
+  });
   
-  // Marker display
-  if (ui.ctx.markerActive) {
-    otm_create_marker(ui.ctx.markerLatLng,true);
-  }
 }
 
 // our exports

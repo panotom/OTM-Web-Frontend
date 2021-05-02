@@ -13,7 +13,7 @@
 
 // imports & requires
 // ==================
-import { ui } from '../src/index.js';
+import { otm_encode_maidenhead } from '../src/otm-maidenhead.js';
 
 // QTH grid factory
 // ================
@@ -28,17 +28,18 @@ function otm_init_qth_factory() {
       graticuleLabel: true,             // show the graticule label flag
       opacity: 1,                       // general opacity of all elements (canvas opacity)
       lineWith: 0.5,                    // width of graticule lines
-      lineColor: 'rgba(0,0,255,0.6)',   // color of the line
+      lineColor: 'rgba(0,0,255,0.65)',   // color of the line
+      fontColor: 'rgba(0,0,255,0.9)',   // color of the font
       fontFace: 'Arial, Helvetica, sans-serif', // font face used
       zoomInterval: {                   // our interval control
         longitude: 
-        [{ start: 1, end: 5, interval: 18 },
-          { start: 6, end: 9, interval: 1.8 },
-          { start: 10, end: 20, interval: 0.1 }],
-          latitude: 
-          [{ start: 1, end: 5, interval: 9 },
-            { start: 6, end: 9, interval: 0.9 },
-            { start: 10, end: 20, interval: 0.05 }]
+        [{ start: 1, end: 4, interval: 20 },
+          { start: 5, end: 9, interval: 2 },
+          { start: 10, end: 20, interval: 2 / 24 }],
+        latitude: 
+        [{ start: 1, end: 4, interval: 10 },
+            { start: 5, end: 9, interval: 1 },
+            { start: 10, end: 20, interval: 1 / 24 }]
           }
         },
         
@@ -207,7 +208,7 @@ function otm_init_qth_factory() {
         // =====================================
         _latToString: function (lat) {
           
-          lat = Math.round(lat * 1000000) / 1000000;
+          lat = Math.round(lat * 100) / 100;
           if (lat < 0) {
             return (lat * -1) + ' S';
           } else if (lat > 0) {
@@ -220,17 +221,19 @@ function otm_init_qth_factory() {
         // ======================================
         _lngToString: function (lng) {
           
-          lng = Math.round(lng * 1000000) / 1000000;
-          if (lng > 180) {
-            return (360 - lng) + ' W';
-          } else if (lng > 0 && lng < 180) {
+          while (lng > 180) {
+            lng -= 360;
+          }
+          while (lng < -180) {
+            lng += 360;
+          }
+          lng = Math.round(lng * 100) / 100;
+          if (lng > 0 && lng < 180) {
             return lng + ' E';
           } else if (lng < 0 && lng > -180) {
             return (lng * -1) + ' W';
           } else if (lng == -180) {
             return String(lng * -1);
-          } else if (lng < -180) {
-            return (360 + lng) + ' W';
           }
           return String(lng);
         },
@@ -292,6 +295,7 @@ function otm_init_qth_factory() {
           
           var canvas = this._canvas;
           var map = this._map;
+          var maidenPrecision;
           
           // fetch graticule intervals when not present
           if (L.Browser.canvas && map) {
@@ -302,6 +306,15 @@ function otm_init_qth_factory() {
             // graticule intervals
             var latInterval = this._currLatInterval;
             var lngInterval = this._currLngInterval;
+
+            // maidenhead precision
+            if (latInterval >= 9) {
+              maidenPrecision = 2;
+            } else if (latInterval >= 0.9) {
+              maidenPrecision = 4;
+            } else {
+              maidenPrecision = 6;
+            }
             
             // pixel size of map canvas
             var cv_width_px = canvas.width;
@@ -368,7 +381,7 @@ function otm_init_qth_factory() {
                 }
               }
             }
-
+            
             // render latitude line incl. graticule label
             // ==========================================
             function _render_lat(self, lat_tick) {
@@ -394,25 +407,51 @@ function otm_init_qth_factory() {
                 ctx.fillStyle = self.options.lineColor;
                 ctx.fillRect(0, labelY - 9, labelWidth + 4, 12);
                 ctx.fillRect(cv_width_px - labelWidth - 4, labelY - 9, labelWidth + 4, 12);
+                ctx.textAlign = "left";
                 ctx.fillStyle = 'white';
                 ctx.fillText(gLabel, 2, labelY);
                 ctx.fillText(gLabel, cv_width_px - labelWidth - 2, labelY);
               }
             }
-           
+            
             // render qth label
             // ================
             function _render_qth_string(self, lat_tick, lng_tick) {
-              //console.log("LAT " + lat_tick + " LON " + lng_tick);
-              var tl = map.latLngToContainerPoint(L.latLng(lat_tick, lng_tick));
-              var br = map.latLngToContainerPoint(L.latLng(lat_tick + latInterval, lng_tick - lngInterval));
-              var wi = br.x - tl.x;
-              var he = br.y - tl.y;
-              //console.log("X1:" + tl.x + " X2:" + br.x + " Y1:" + br.y + " Y2:" + tl.y);
-              ctx.beginPath();
-              ctx.arc(tl.x + wi / 2, tl.y + he / 2 , 10, 0, 2 * Math.PI, false);
-              ctx.fillStyle = 'red';
-              ctx.fill();
+
+              // get maidenhead string
+              let qths = otm_encode_maidenhead(lat_tick + latInterval / 2, lng_tick + lngInterval / 2, maidenPrecision);
+
+              // calculate graticule rect
+              let tl = map.latLngToContainerPoint(L.latLng(lat_tick, lng_tick));
+              let br = map.latLngToContainerPoint(L.latLng(lat_tick + latInterval, lng_tick + lngInterval));
+              let wi = br.x - tl.x;
+              let he = br.y - tl.y;
+
+              // calculate font metrics
+              let fontsize;
+              if (wi > 400) {
+                fontsize = 20;
+              } else if (wi > 150) {
+                fontsize = 16;
+              } else {
+                fontsize = 12;
+              }
+              let tx = tl.x + wi / 2;
+              let ty = tl.y + (he + fontsize * 0.75) / 2;
+
+              // draw the string
+              ctx.save();
+              ctx.font = fontsize + 'px ' + self.options.fontFace; 
+              ctx.fontWeight = 800;
+              ctx.fillStyle = self.options.fontColor;
+              ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+              ctx.lineWidth = fontsize / 6;
+              ctx.lineJoin = "round";
+              ctx.miterLimit = 2;
+              ctx.textAlign = "center";
+              ctx.strokeText(qths, tx, ty);
+              ctx.fillText(qths, tx, ty);
+              ctx.restore();
             }
             
             // render longitude line incl. graticule label and qth labels
@@ -427,8 +466,8 @@ function otm_init_qth_factory() {
               ctx.lineWidth = self.options.lineWidth;
               ctx.strokeStyle = self.options.lineColor;
               ctx.beginPath();
-              ctx.moveTo(lineTop.x, /*lineTop.y +*/ 1);
-              ctx.lineTo(lineBottom.x, /*lineBottom.y*/ cv_height_px - 1);
+              ctx.moveTo(lineTop.x, 1);
+              ctx.lineTo(lineBottom.x, cv_height_px - 1);
               ctx.stroke();
               
               // draw the graticule label
@@ -439,8 +478,8 @@ function otm_init_qth_factory() {
                 ctx.fillStyle = self.options.lineColor;
                 ctx.fillRect(lineTop.x - (labelWidth / 2) - 2, 0, labelWidth + 4, 12);
                 ctx.fillRect(lineTop.x - (labelWidth / 2) - 2, cv_height_px - 12, labelWidth + 4, 12);
-                
                 ctx.fillStyle = 'white';
+                ctx.textAlign = "left";
                 ctx.fillText(gLabel, lineTop.x - (labelWidth / 2), 9);
                 ctx.fillText(gLabel, lineTop.x - (labelWidth / 2), cv_height_px - 3);
               }
@@ -449,19 +488,20 @@ function otm_init_qth_factory() {
               if (latInterval > 0) {
                 for (var j = latInterval; j <= _lat_t; j += latInterval) {
                   if (j >= _lat_b) {
-                    _render_qth_string(this, j, i);
+                    _render_qth_string(self, j, lng_tick);
                   }
                 }
                 for (var j = 0; j >= _lat_b - latInterval; j -= latInterval) {
                   if (j <= _lat_t) {
-                    _render_qth_string(this, j, i);
+                    _render_qth_string(self, j, lng_tick);
                   }
                 }
               }
             };
           }
         }      
-      });
+      }
+      );
     }
     
     // our exports

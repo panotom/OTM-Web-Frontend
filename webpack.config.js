@@ -1,3 +1,4 @@
+const package = require('./package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -11,7 +12,12 @@ module.exports = (env, argv) => {
   const isEnvProduction = argv.mode === 'production';
   
   // our environment
-  EnvBrowserPath = isEnvDevelopment ? 'http://localhost:9000/' : 'https://www.mountainpanoramas.com/____otm-test/';
+  EnvTestThomasWorbs = true;
+  EnvBrowserPath = isEnvDevelopment ? 'http://localhost:9000/' : 
+    (EnvTestThomasWorbs ? 'https://www.mountainpanoramas.com/____otm-test/' : 'https://opentopomap.org/');
+  EnvDomain = EnvTestThomasWorbs ? 'www.mountainpanoramas.com' : 'opentopomap.org';
+  EnvVersion = package.version;
+  EnvCookieName = "OTM-" + package.version.replace(/\./g, '-') + (isEnvProduction ? '' : '-test');
 
   return {
   entry: './src/index.js',
@@ -74,7 +80,6 @@ module.exports = (env, argv) => {
     // Clean dist folder
     new CleanWebpackPlugin(),
 
-
     // HTML template
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src", "index.ejs"),
@@ -88,8 +93,7 @@ module.exports = (env, argv) => {
     // copy language jsons
     new CopyPlugin({
       patterns: [
-        { from: "localization", to: "l" },
-        { from: "src-htaccess", to: "" }
+        { from: "localization", to: "l" }
       ],
     }),
     
@@ -107,9 +111,20 @@ module.exports = (env, argv) => {
     
     // inject the OTM environment
     new webpack.DefinePlugin({
+      OTM_ENV_DEVELOPMENT: JSON.stringify(isEnvDevelopment)
+    }),
+    new webpack.DefinePlugin({
       OTM_ENV_BROWSERPATH: JSON.stringify(EnvBrowserPath)
     }),
-
+    new webpack.DefinePlugin({
+      OTM_ENV_VERSION: JSON.stringify(EnvVersion)
+    }),
+    new webpack.DefinePlugin({
+      OTM_ENV_COOKIE_NAME: JSON.stringify(EnvCookieName)
+    }),
+    new webpack.DefinePlugin({
+      OTM_ENV_DOMAIN: JSON.stringify(EnvDomain)
+    }),
   ]
   };
 };
