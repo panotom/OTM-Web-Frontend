@@ -20,7 +20,16 @@ module.exports = (env, argv) => {
   EnvCookieName = "OTM-" + package.version.replace(/\./g, '-') + (isEnvProduction ? '' : '-test');
 
   return {
+
+  resolve: {
+    alias: {
+      "togeojson": path.resolve(__dirname, 'node_modules/@tmcw/togeojson/'),
+      "leaflet-elevation": path.resolve(__dirname, 'node_modules/@raruto/leaflet-elevation/')
+    }
+  },
+
   entry: './src/index.js',
+
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: isEnvProduction ? '[contenthash].js' : '[name].js',
@@ -75,6 +84,7 @@ module.exports = (env, argv) => {
       },
     ]
   },
+
   plugins: [
     
     // Clean dist folder
@@ -105,8 +115,8 @@ module.exports = (env, argv) => {
       
     // provide toGeoJSON globally
     new webpack.ProvidePlugin({
-      toGeoJSON: '@mapbox/togeojson',
-      'window.toGeoJSON': '@mapbox/togeojson'
+      toGeoJSON: '@tmcw/togeojson',
+      'window.toGeoJSON': '@tmcw/togeojson'
     }),
     
     // inject the OTM environment

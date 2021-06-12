@@ -19,6 +19,9 @@
     "Lonvia Cycling Routes",
     "QTH Graticule"
   ],
+  "search": {
+    "label": "Enter location name ..."
+  },
   "locate": {
     "message_locating": "Detecting geolocation",
     "errors": [

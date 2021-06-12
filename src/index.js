@@ -14,18 +14,21 @@
 // ==================
 import 'leaflet-filelayer';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/assets/css/leaflet.css';
+import 'leaflet-elevation/dist/leaflet-elevation.css';
 
 import { otm_get_context, otm_set_url_context, otm_set_cookie_context } from '../src/otm-context.js';
 import { otm_load_localization } from '../src/otm-load-localization.js';
 import { otm_init_layers } from '../src/otm-layers.js';
 import { otm_create_language_picker } from '../src/otm-ui-language-picker.js';
-import { otm_ui_init_controls, otm_ui_show_scale, otm_ui_hide_scale } from '../src/otm-ui-controls.js';
+import { otm_init_button_factory, otm_ui_init_controls, otm_ui_init_infobutton, otm_ui_show_scale, otm_ui_hide_scale } from '../src/otm-ui-controls.js';
 import { otm_init_locate } from '../src/otm-locate.js';
 import { otm_create_marker } from '../src/otm-marker.js';
 
 require('../src-images/favicon.ico');
 require('leaflet/dist/images/marker-shadow.png');
 require('leaflet/dist/images/marker-icon.png');
+require('leaflet/dist/images/marker-icon-2x.png');
 require('leaflet/dist/images/layers.png');
 require('leaflet/dist/images/layers-2x.png');
 require('./index.scss');
@@ -76,12 +79,19 @@ var ui = {
 
   // ui controls
   ctrl: {
-    buttonSeach: null,      // search button object
+    buttonSearch: null,     // search button object
     buttonLocate: null,     // locate button object
     buttonFileLayer: null,  // file layer button object
     buttonMarker: null,     // marker button object
+    buttonInfo: null,       // info button object
     scale: null,            // scale control
     languagePicker: null    // language picker control
+  },
+  
+  // search control
+  search: {
+    active: false,    // active status
+    control: null     // current control
   },
   
   // position locate control
@@ -96,6 +106,12 @@ var ui = {
   // marker control
   marker: {
     e: null           // element
+  },
+
+  // elevation control
+  elevation: {
+    control: null,    // current control
+    layer: null       // layer
   }
 }
 
@@ -126,6 +142,12 @@ function otm_init() {
     dragging: true,
   }).setView(ui.ctx.mapLatLng, ui.ctx.mapZoom);
 
+  // Init our button factory
+  otm_init_button_factory();
+  
+  // Init info button
+  otm_ui_init_infobutton();
+
   // Init the map layers
   otm_init_layers();
   
@@ -135,7 +157,7 @@ function otm_init() {
   // Show scale control
   otm_ui_show_scale();
   
-  // Init all UI controles (buttpns left)
+  // Init all UI controles (buttons left)
   otm_ui_init_controls();
   
   // Init location handling

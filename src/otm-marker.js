@@ -39,12 +39,10 @@ function otm_create_marker(pos,init) {
   ui.marker.e = L.marker(
     pos,
     {
-      //icon: L.Icon.Default,
       draggable: true,
       autoPan: true
     }
   ).addTo(ui.map);
-  //console.log('MARKER ',ui.marker.e)
   
   // add drag end event for updating context
   ui.marker.e.on('dragend', onMarkerMoved);
@@ -82,6 +80,27 @@ function otm_remove_marker() {
   ui.ctrl.buttonMarker.setToggleState(false);
 }
 
+// set marker pos, zoom & center, create marker when not present
+// =============================================================
+function otm_set_markerpos(pos) {
+    
+  // zoom to a minimum zoom level & center
+  var zoom = ui.map.getZoom();
+  if (zoom < 13) {
+    zoom = 13;
+  }
+  ui.map.setView(pos, zoom);
+
+  // create marker or just adjust position when already there
+  if (!ui.ctx.markerActive) {
+    otm_create_marker(pos, false);
+  }
+  else {
+    ui.marker.e.setLatLng(pos);
+    otm_set_url_context();
+  }
+}
+
 // marker moved event handler
 // ==========================
 function onMarkerMoved(e) {
@@ -95,4 +114,4 @@ function onMarkerMoved(e) {
 
 // our exports
 // ===========
-export { otm_toggle_marker, otm_create_marker };
+export { otm_toggle_marker, otm_create_marker, otm_set_markerpos };
