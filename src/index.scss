@@ -1,9 +1,20 @@
+/*///////////////////////////////////////////////////////
+//
+// OTM Web Frontend - index.scss
+//
+// All individual CSS styles compiled with SASS 
+//
+// V 2.00 - 01.01.2021 - Thomas Worbs
+//          Created
+//
+///////////////////////////////////////////////////////*/
+
 @-ms-viewport {
   width: device-width;
 }
 
 html { 
-  height: 100%; 
+  height: 100%;
 }
 
 body { 
@@ -25,8 +36,10 @@ body {
 /* color definition for controls */
 /*********************************/
 $control-background-color: #FFFFFF;
-$control-hover-color: #F7F7F7;
-$control-separator-color: #F0F0F0;
+$control-hover-color: #F0F0F0;
+$control-separator-color: #E0E0E0;
+$control-text-color-dim: #666666;
+$control-text-color: #333333;
 
 /* common button classes for special styling */
 /*********************************************/
@@ -42,10 +55,6 @@ $control-separator-color: #F0F0F0;
 
 /* specific button classes for different icons */
 /***********************************************/
-.otm-button-otm {
-  background-image: url('../src-images/icon-otm.png');
-  background-size: 22px auto;
-}
 .otm-button-search {
   background-image: url('../src-images/icon-search.svg');
   background-size: 20px auto;
@@ -78,7 +87,7 @@ $control-separator-color: #F0F0F0;
 /* Search control (override) styles */
 /************************************/
 .leaflet-control-geosearch {
-  color: #606060;
+  color: $control-text-color-dim;
   width: 864px;
   max-width: 70%;
   padding-right: 12px;
@@ -162,6 +171,73 @@ $marker-location-color-flash: rgba(255,200,200,1);
     transform: scale(1.0);
     opacity: 0;
   }
+}
+
+/* info dropdown */
+/*****************/
+$infodropdown-width: 164px;
+$infodropdown-padding-h: 10px;
+$infodropdown-button-size: 44px;
+
+.otm-info-dropdown {
+  position: relative;
+  background-color: $control-background-color;
+}
+.otm-info-logobutton {
+  width: $infodropdown-button-size;
+  height: $infodropdown-button-size;
+  background-image: url('../src-images/logo-otm-square.png');
+  background-size: 36px;
+  background-position: 5px 4px;
+  background-repeat: no-repeat;
+}
+.otm-info-logobutton-visible {
+  display: block;
+}
+.otm-info-logobutton-hidden {
+  display: none;
+}
+.otm-info-droparea {
+  width: $infodropdown-width;
+  color: $control-text-color;
+}
+.otm-info-droparea-visible {
+  display: flex;
+  flex-direction: column;
+}
+.otm-info-droparea-hidden {
+  display: none;
+}
+.otm-info-item {
+  padding: 0px $infodropdown-padding-h;
+  display: block;
+  width: $infodropdown-width - 2 * $infodropdown-padding-h !important;
+  text-align: left !important;
+  overflow: hidden;
+  outline: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid $control-separator-color !important;
+  cursor: pointer !important;
+  &:hover {
+    background-color: $control-hover-color;
+    color: $control-text-color-dim !important;
+  }
+}
+.otm-info-header {
+  padding: 0px $infodropdown-padding-h;
+  display: block;
+  width: $infodropdown-width - 2 * $infodropdown-padding-h !important;
+  text-align: left !important;
+  overflow: hidden;
+  outline: none !important;
+  border-radius: 0 !important;
+  border-bottom: 2px solid $control-separator-color;
+  height: 36px;
+  background-color: #FFF;
+  background-image: url('../src-images/logo-otm-full.png');
+  background-size: 130px;
+  background-position: ($infodropdown-padding-h - 1px) 8px;
+  background-repeat: no-repeat;
 }
 
 /* language picker */

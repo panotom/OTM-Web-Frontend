@@ -25,6 +25,7 @@ function otm_toggle_search() {
   }
   else {
     add_serach_control();
+    ui.ctrl.infoDropdown.undrop();
     ui.search.active = true;
   }
   ui.ctrl.buttonSearch.setToggleState(ui.search.active);

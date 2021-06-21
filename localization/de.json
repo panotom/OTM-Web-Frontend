@@ -10,6 +10,22 @@
     "hikeroutes": "Wanderrouten",
     "bikeroutes": "Radrouten"
   },
+  "info": {
+    "about": "Legende & Info",
+    "about_url": "https://opentopomap.org/about",
+    "impress": "Impressum & Nutzung",
+    "impress_short": "Impressum",
+    "impress_url": "https://opentopomap.org/credits",
+    "credits": "Autoren",
+    "credits_short": "Credits",
+    "credits_url": "https://opentopomap.org/credits",
+    "garmin": "Garmin-Karten",
+    "garmin_url": "https://garmin.opentopomap.org/"
+  },
+  "zoom": {
+    "zoom_in_title": "Einzoomen",
+    "zoom_out_title": "Auszoomen"
+  },
   "layers_base": [
     "OpenTopoMap",
     "OpenStreetMap"

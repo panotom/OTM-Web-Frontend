@@ -26,8 +26,8 @@ function otm_init_button_factory() {
   L.Control.Button = L.Control.extend({
     
     statics: {
-      TITLE: 'Test Tooltip',
-      LABEL: '&#8965;'
+      TITLE: '',
+      LABEL: ''
     },
 
     // initialize: set options
@@ -51,7 +51,6 @@ function otm_init_button_factory() {
       this._button = L.DomUtil.create('div', 'leaflet-bar');
       if (this._icon) {
         this._button_a = L.DomUtil.create('a', 'otm-button otm-button-' + this._icon, this._button);
-        //this._button_a.innerHTML = L.Control.Button.LABEL;
         this._button_a.href = '#';
         this._button_a.title = this._title;
       }
@@ -119,12 +118,6 @@ const otm_button_marker = function (opts) {
   return new L.Control.Button(opts);
 }
 
-const otm_button_info = function (opts) {
-  opts.icon = 'otm';
-  opts.title = "";
-  return new L.Control.Button(opts);
-}
-
 // init function for UI controls
 // =============================
 function otm_ui_init_controls() {
@@ -151,16 +144,6 @@ function otm_ui_init_controls() {
   otm_init_trackloading();
 }
 
-// init info button at top right position
-// ======================================
-function otm_ui_init_infobutton() {
-  // Add info button
-  ui.ctrl.buttonInfo = otm_button_info({ 
-    position: 'topright',
-    clickhandler: otm_toggle_locate
-  }).addTo(ui.map);
-}
-  
 // show scale control
 // ==================
 function otm_ui_show_scale() {
@@ -178,4 +161,4 @@ function otm_ui_hide_scale() {
 
 // our exports
 // ===========
-export { otm_init_button_factory, otm_ui_init_controls, otm_ui_init_infobutton, otm_ui_show_scale, otm_ui_hide_scale };
+export { otm_init_button_factory, otm_ui_init_controls, otm_ui_show_scale, otm_ui_hide_scale };

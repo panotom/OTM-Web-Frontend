@@ -3,7 +3,7 @@
 // OTM Web Frontend - index.js
 //
 // Entry point with global static UI object and 
-// init functions
+// init functions and map event handlers
 //
 // V 2.00 - 01.01.2021 - Thomas Worbs
 //          Created
@@ -21,7 +21,8 @@ import { otm_get_context, otm_set_url_context, otm_set_cookie_context } from '..
 import { otm_load_localization } from '../src/otm-load-localization.js';
 import { otm_init_layers } from '../src/otm-layers.js';
 import { otm_create_language_picker } from '../src/otm-ui-language-picker.js';
-import { otm_init_button_factory, otm_ui_init_controls, otm_ui_init_infobutton, otm_ui_show_scale, otm_ui_hide_scale } from '../src/otm-ui-controls.js';
+import { otm_create_info_dropdown } from '../src/otm-ui-info-dropdown.js';
+import { otm_init_button_factory, otm_ui_init_controls, otm_ui_show_scale, otm_ui_hide_scale } from '../src/otm-ui-controls.js';
 import { otm_init_locate } from '../src/otm-locate.js';
 import { otm_create_marker } from '../src/otm-marker.js';
 
@@ -83,7 +84,7 @@ var ui = {
     buttonLocate: null,     // locate button object
     buttonFileLayer: null,  // file layer button object
     buttonMarker: null,     // marker button object
-    buttonInfo: null,       // info button object
+    infoDropdown: null,     // info dropdown object
     scale: null,            // scale control
     languagePicker: null    // language picker control
   },
@@ -142,11 +143,15 @@ function otm_init() {
     dragging: true,
   }).setView(ui.ctx.mapLatLng, ui.ctx.mapZoom);
 
+  // Set zoom control tooltip texts
+  ui.map.zoomControl._zoomInButton.title = ui.loc.zoom.zoom_in_title;
+  ui.map.zoomControl._zoomOutButton.title = ui.loc.zoom.zoom_out_title;
+
   // Init our button factory
   otm_init_button_factory();
   
-  // Init info button
-  otm_ui_init_infobutton();
+  // Create info dropdown
+  otm_create_info_dropdown();
 
   // Init the map layers
   otm_init_layers();

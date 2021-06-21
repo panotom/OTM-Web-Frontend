@@ -28,14 +28,12 @@ function otm_load_localization(success, error) {
           data
         }) => {
           ui.loc = data;
-          console.log(ui);
           success();
         })
         .catch((err) => {
           console.log(err);
           error();
         })
-
     })
     .catch((err) => {
       console.log(err);
