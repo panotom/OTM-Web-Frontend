@@ -9,6 +9,8 @@
 //
 ///////////////////////////////////////////////////////*/
 
+@use 'sass:math';
+
 @-ms-viewport {
   width: device-width;
 }
@@ -105,9 +107,9 @@ $marker-location-color-flash: rgba(255,200,200,1);
   cursor: inherit;
   width: $marker-location-size !important;
   height: $marker-location-size !important;
-  margin-top: - $marker-location-size / 2 !important;
-  margin-left: - $marker-location-size / 2 !important;
-  border-radius: $marker-location-size / 2;
+  margin-top: math.div(-$marker-location-size, 2) !important;
+  margin-left: math.div(-$marker-location-size, 2) !important;
+  border-radius: math.div($marker-location-size, 2);
   background-color: $marker-location-color;
 	box-shadow: 0 0 0 0 $marker-location-color;
 	animation: otm-marker-location-keyframes 1s infinite;

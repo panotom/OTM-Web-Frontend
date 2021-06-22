@@ -4,22 +4,22 @@
     "description": "OpenTopoMap"
   },
   "c": {
-    "map_data": "map data",
-    "map_imagery": "map imagery",
-    "contributors": "contributors",
-    "hikeroutes": "hiking routes",
-    "bikeroutes": "cycling routes"
+    "map_data": "Dati della carta",
+    "map_imagery": "Imagini della carta",
+    "contributors": "Contributori",
+    "hikeroutes": "Percorsi escursionistici",
+    "bikeroutes": "Percorsi ciclabili"
   },
   "info": {
-    "about": "Legend & Info",
+    "about": "Legenda & Informazioni",
     "about_url": "https://opentopomap.org/about",
-    "impress": "Impress & Terms",
-    "impress_short": "Impress",
+    "impress": "Impronta & Condizioni",
+    "impress_short": "Impronta",
     "impress_url": "https://opentopomap.org/credits",
-    "credits": "Credits",
-    "credits_short": "Credits",
+    "credits": "Crediti",
+    "credits_short": "Crediti",
     "credits_url": "https://opentopomap.org/credits",
-    "garmin": "Garmin Maps",
+    "garmin": "Mappe Garmin",
     "garmin_url": "https://garmin.opentopomap.org/"
   },
   "zoom": {
@@ -31,28 +31,28 @@
     "OpenStreetMap"
   ],
   "layers_overlay": [
-    "Lonvia Hiking Routes",
-    "Lonvia Cycling Routes",
-    "QTH Graticule"
+    "Percorsi escursionistici Lonvia",
+    "Percorsi ciclabili Lonvia",
+    "Reticolo QTH"
   ],
   "marker": {
-    "title": "Set marker"
+    "title": "Posiziona segnapunto"
   },
   "search": {
-    "title": "Search location",
-    "label": "Enter location name ..."
+    "title": "Trova località",
+    "label": "Inserisci il nome della località ..."
   },
   "locate": {
-    "title": "Show own geolocation",
-    "message_locating": "Detecting geolocation",
+    "title": "Mostra la propria posizione",
+    "message_locating": "Rilevamento della posizione",
     "errors": [
       "Ok",
-      "Geolocation detection blocked by browser settings",
-      "Geolocation detection failed"
+      "Il rilevamento della posizione è stato impedito dalle impostazioni del browser",
+      "Errore nel rilevamento della posizione"
     ]
   },
   "tracks": {
-    "title": "Show track from GPX, KML or GeoJSON file",
-    "errmsg": "Unfortunately track cannot be shown.\nMaybe the selected file does not contain a valid GPX, KML or GeoJSON format.\n\n"
+    "title": "Mostra traccia da file GPX, KML o GeoJSON",
+    "errmsg": "Sfortunatamente la traccia non può essere visualizzata.\nProbabilmente il file selezionato non è nel formato GPX, KML o GeoJSON corretto.\n\n"
   }
 }
