@@ -189,7 +189,7 @@ $infodropdown-button-size: 44px;
   width: $infodropdown-button-size;
   height: $infodropdown-button-size;
   background-image: url('../src-images/logo-otm-square.png');
-  background-size: 36px;
+  background-size: 36px auto;
   background-position: 5px 4px;
   background-repeat: no-repeat;
 }
@@ -237,7 +237,7 @@ $infodropdown-button-size: 44px;
   height: 36px;
   background-color: #FFF;
   background-image: url('../src-images/logo-otm-full.png');
-  background-size: 130px;
+  background-size: 136px auto;
   background-position: ($infodropdown-padding-h - 1px) 8px;
   background-repeat: no-repeat;
 }

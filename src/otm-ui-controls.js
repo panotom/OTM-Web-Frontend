@@ -57,7 +57,7 @@ function otm_init_button_factory() {
       
       // add click handler
       if (this._clickhandler) {
-        L.DomEvent.on(this._button, "mousedown touchstart", (e) => {
+        L.DomEvent.on(this._button, "pointerdown", (e) => {
           this._clickhandler(e);
           L.DomEvent.stop(e);
         });

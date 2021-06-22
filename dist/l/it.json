@@ -13,8 +13,8 @@
   "info": {
     "about": "Legenda & Informazioni",
     "about_url": "https://opentopomap.org/about",
-    "impress": "Impronta & Condizioni",
-    "impress_short": "Impronta",
+    "impress": "Informazioni legali",
+    "impress_short": "Informazione legale",
     "impress_url": "https://opentopomap.org/credits",
     "credits": "Crediti",
     "credits_short": "Crediti",
@@ -52,7 +52,7 @@
     ]
   },
   "tracks": {
-    "title": "Mostra traccia da file GPX, KML o GeoJSON",
+    "title": "Importa traccia da file GPX, KML o GeoJSON",
     "errmsg": "Sfortunatamente la traccia non può essere visualizzata.\nProbabilmente il file selezionato non è nel formato GPX, KML o GeoJSON corretto.\n\n"
   }
 }

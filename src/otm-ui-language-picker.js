@@ -53,7 +53,7 @@ function otm_init_language_picker_factory() {
         this._dropdown = L.DomUtil.create('div', 'otm-lang-picker-dropdown', this._control);
         
         // main button click handler
-        L.DomEvent.on(this._button, "mousedown touchstart", (e) => {
+        L.DomEvent.on(this._button, "pointerdown", (e) => {
           if (this._dropped) {
             L.DomUtil.removeClass(this._dropdown,'dropped');
             this._dropped = false;
@@ -66,9 +66,11 @@ function otm_init_language_picker_factory() {
         });
         
         // canvas click handler
-        ui.map.on("mousedown touchstart", (e) => {
-          L.DomUtil.removeClass(this._dropdown,'dropped');
-          this._dropped = false;          
+        ui.map.on("mousedown pointerdown", (e) => {
+          if (e.originalEvent.target.id == 'map' && this._dropped) {
+            L.DomUtil.removeClass(this._dropdown,'dropped');
+            this._dropped = false;
+          }          
         });
         
         // add the list items with event handling

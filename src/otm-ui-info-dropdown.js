@@ -74,7 +74,7 @@ function otm_init_info_dropdown_factory() {
       this._item_garmin.href = ui.loc.info.garmin_url;
       
       // logobutton mouseover handler
-      L.DomEvent.on(this._control, "mouseover touchstart", (e) => {
+      L.DomEvent.on(this._control, "mouseover pointerdown", (e) => {
         if (!this._dropdown) {
           L.DomUtil.removeClass(this._logobutton,'otm-info-logobutton-visible');
           L.DomUtil.addClass(this._logobutton,'otm-info-logobutton-hidden');
@@ -94,7 +94,7 @@ function otm_init_info_dropdown_factory() {
       });
       
       // canvas click handler
-      ui.map.on("mousedown touchstart", (e) => {
+      ui.map.on("mousedown pointerdown", (e) => {
         if (e.originalEvent.target.id == 'map') {
           this.undrop();
         }
