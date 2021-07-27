@@ -154,3 +154,13 @@ The configuration for a specific language is stored in a JSON file specific for 
 Beside the UI strings the language configuration also contains the URLs for four linked pages (Impress etc.) as these pages are also language specific. For details see next section.
 
 When adding a new language, do not forget to add the flag image file in the repo folder *./src-images* named *f-`<2-letter-ISO-code>`.svg*.
+
+## Language specific Link URLs
+
+Each language configuration JSON file contains four link URLs within the JSON tag *info*:
+* `about_url`: link to the localized map Legend and Information page
+* `impress_url`: link to the localized Impress and Terms of use page
+* `credits_url`: link to the localized page containing all credits to autors and license information of 3rd party packages and materials used
+* `garmin_url`: link to the localized page giving all information about the Garmin version of OTM
+
+The links can be reached within the UI through the topright button in the map. In addition, `impress_url` and `credits_url` are also represented as link within the map footer to ensure 1-click-accessability.
