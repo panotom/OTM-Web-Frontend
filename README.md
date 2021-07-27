@@ -26,9 +26,9 @@ This launches the Webpack server with file watch and live view in the default Br
 
 For building the distribution version (that will be created in the folder *./dist*) first edit the destination URL flag of the productive environment in the *webpack.config.js* file. Set *EnvTestThomasWorbs* to false. This causes the root URL tp be set to *https://opentopomap.org/*.
 
-```bash
-  // our environment
-  EnvTestThomasWorbs = false;
+```js
+// our environment
+EnvTestThomasWorbs = false;
 ```
 
 Then enter the npm command
