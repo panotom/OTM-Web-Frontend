@@ -88,3 +88,69 @@ The file *lang.json* just contains a list of supported languages represented by 
 }
 ```
 
+The configuration for a specific language is stored in a JSON file specific for the language named *`<2-letter-ISO-code>`.json*. The version for English is shown below.
+
+```json
+{
+  "sitehead": {
+    "title": "OpenTopoMap - Topographic Maps from OpenStreetMap data",
+    "description": "... directly to the map"
+  },
+  "c": {
+    "map_data": "map data",
+    "map_imagery": "map imagery",
+    "contributors": "contributors",
+    "hikeroutes": "hiking routes",
+    "bikeroutes": "cycling routes"
+  },
+  "info": {
+    "about": "Legend & Info",
+    "about_url": "https://opentopomap.org/about",
+    "impress": "Impress & Terms",
+    "impress_short": "Impress",
+    "impress_url": "https://opentopomap.org/credits",
+    "credits": "Credits",
+    "credits_short": "Credits",
+    "credits_url": "https://opentopomap.org/credits",
+    "garmin": "Garmin Maps",
+    "garmin_url": "https://garmin.opentopomap.org/"
+  },
+  "zoom": {
+    "zoom_in_title": "Zoom in",
+    "zoom_out_title": "Zoom out"
+  },
+  "layers_base": [
+    "OpenTopoMap",
+    "OpenStreetMap"
+  ],
+  "layers_overlay": [
+    "Lonvia Hiking Routes",
+    "Lonvia Cycling Routes",
+    "QTH Graticule"
+  ],
+  "marker": {
+    "title": "Set marker"
+  },
+  "search": {
+    "title": "Search location",
+    "label": "Enter location name ..."
+  },
+  "locate": {
+    "title": "Show own geolocation",
+    "message_locating": "Detecting geolocation",
+    "errors": [
+      "Ok",
+      "Geolocation detection blocked by browser settings",
+      "Geolocation detection failed"
+    ]
+  },
+  "tracks": {
+    "title": "Show track from GPX, KML or GeoJSON file",
+    "errmsg": "Unfortunately track cannot be shown.\nMaybe the selected file does not contain a valid GPX, KML or GeoJSON format.\n\n"
+  }
+}
+```
+
+Beside the UI strings the language configuration also contains the URLs for four linked pages (Impress etc.) as these pages are also language specific. For details see next section.
+
+When adding a new language, do not forget to add the flag image file in the repo folder *./src-images* named *f-`<2-letter-ISO-code>`.svg*.
