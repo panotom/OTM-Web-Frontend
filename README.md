@@ -43,11 +43,11 @@ $ npm run build
 
 The main entrypoint php file.
 
-### *<hash>.js*
+### *<<hash>>.js*
 
 Single packed and compressed JavaScript source including all JS and CSS code including 3rd party packages.
 
-### *<hash>.js.LICENSE.txt*
+### *<<hash>>.js.LICENSE.txt*
 
 License information of some 3rd party packages.
 
