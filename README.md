@@ -2,7 +2,7 @@
 
 The new Web Frontend for opentopomap.org
 
-## Installation of the development environment
+## Installation of the Development Environment
 
 This web frontend is based on the node.js environment and uses Webpack 5 as packing engine.
 
@@ -12,3 +12,27 @@ For development and build, an actual version of node.js has to be installed. In 
 $ npm install
 ```
 
+## Starting the Development Mode
+
+Start the development environment using the npm command
+
+```bash
+$ npm start
+```
+
+This launches the Webpack server with file watch and live view in the default Browser.
+
+## Building the Distribution Version
+
+For building the distribution version (that will be created in the folder *./dist*) first edit the destination URL flag of the productive environment in the *webpack.config.js* file. Set *EnvTestThomasWorbs* to false. This causes the root URL tp be set to *https://opentopomap.org/*.
+
+```bash
+  // our environment
+  EnvTestThomasWorbs = false;
+```
+
+Then enter the npm command
+
+```bash
+$ npm run build
+```
