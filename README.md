@@ -26,7 +26,7 @@ This launches the Webpack server with file watch and live view in the default Br
 
 For building the distribution version (that will be created in the folder *./dist*) first edit the destination URL flag of the productive environment in the *webpack.config.js* file. Set *EnvTestThomasWorbs* to false. This causes the root URL tp be set to *https://opentopomap.org/*.
 
-```js
+```javascript
 // our environment
 EnvTestThomasWorbs = false;
 ```
@@ -39,26 +39,26 @@ $ npm run build
 
 ## The Files and Directories in the Ditribution Folder *./dist*
 
-### *index.php*
+#### *index.php*
 
 The main entrypoint php file.
 
-### *<<hash>>.js*
+#### *`<hash>`.js*
 
 Single packed and compressed JavaScript source including all JS and CSS code including 3rd party packages.
 
-### *<<hash>>.js.LICENSE.txt*
+#### *`<hash>`.js.LICENSE.txt*
 
 License information of some 3rd party packages.
 
-### *favicon.ico*
+#### *favicon.ico*
 
 The website's icon file.
 
-### Folder *./i*
+#### Folder *./i*
 
 Contains all images required by the webapp (svg and png).
 
-### Folder *./l*
+#### Folder *./l*
 
 The localization language JSON files from the repo folder *./localization* (explained later in this documentation).
