@@ -62,3 +62,11 @@ Contains all images required by the webapp (svg and png).
 #### Folder *./l*
 
 The localization language JSON files from the repo folder *./localization* (explained later in this documentation).
+
+## Third Party Packages used
+
+Package | Github URL | License
+------------ | ------------- | -------------
+Leaflet |  https://github.com/Leaflet/Leaflet | see Github URL
+Leaflet Filelayer | https://github.com/makinacorpus/Leaflet.FileLayer | MIT
+
