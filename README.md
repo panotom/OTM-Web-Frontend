@@ -69,4 +69,10 @@ Package | Github URL | License
 ------------ | ------------- | -------------
 Leaflet |  https://github.com/Leaflet/Leaflet | see Github URL
 Leaflet Filelayer | https://github.com/makinacorpus/Leaflet.FileLayer | MIT
+Leaflet Geosearch | https://github.com/smeijer/leaflet-geosearch | MIT
+Leaflet Elevation | https://github.com/Raruto/leaflet-elevation | GNU GPL V3
+Axios | https://github.com/axios/axios | see Github URL
+js-cookie | https://github.com/js-cookie/js-cookie | MIT
+togeojson | https://github.com/placemark/togeojson | see Github URL
+
 
