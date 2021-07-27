@@ -36,3 +36,29 @@ Then enter the npm command
 ```bash
 $ npm run build
 ```
+
+## The Files and Directories in the Ditribution Folder *./dist*
+
+### *index.php*
+
+The main entrypoint php file.
+
+### *<hash>.js*
+
+Single packed and compressed JavaScript source including all JS and CSS code including 3rd party packages.
+
+### *<hash>.js.LICENSE.txt*
+
+License information of some 3rd party packages.
+
+### *favicon.ico*
+
+The website's icon file.
+
+### Folder *./i*
+
+Contains all images required by the webapp (svg and png).
+
+### Folder *./l*
+
+The localization language JSON files from the repo folder *./localization* (explained later in this documentation).
