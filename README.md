@@ -75,4 +75,16 @@ Axios | https://github.com/axios/axios | see Github URL
 js-cookie | https://github.com/js-cookie/js-cookie | MIT
 togeojson | https://github.com/placemark/togeojson | see Github URL
 
+## Localization
+
+The OTM Frontend provides full language localization support. The supported languages as well as the UI strings for each languages are loaded dynamically from JSON files. These JSON files are located in the repo folder *./localization*.
+
+The file *lang.json* just contains a list of supported languages represented by the 2 letter ISO codes as well as the default language as a fallback for unsupported languages.
+
+```json
+{
+  "languages": ["en","de","fr","it","es"],
+  "defaultLanguage": "en"
+}
+```
 
